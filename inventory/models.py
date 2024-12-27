@@ -54,6 +54,13 @@ class Packaged(models.Model):
 
 
 class Inventory(models.Model):
+    order = models.ForeignKey(
+        Order,
+        on_delete= models.PROTECT, 
+        null=False,
+        blank=False,
+        verbose_name="Orden de compra"
+    )
     product = models.ForeignKey(
         Product,
         on_delete= models.PROTECT, 
@@ -65,7 +72,7 @@ class Inventory(models.Model):
     purchase_price = models.FloatField("Precio de compra")#agregar foranea de orden
 
     def __str__(self):
-        return f"{self.product__name} - {self.amount} - ${self.purchase_price/self.amount}"
+        return f"{self.product.name} - {self.amount} - ${self.purchase_price/self.amount}"
 
     class Meta:
          verbose_name="Inventario"
@@ -89,7 +96,7 @@ class Price(models.Model):
     sale_price = models.FloatField("Precio de venta")
 
     def __str__(self):
-        return f"{self.sale_price}"
+        return f"{self.inventory.product.name} - {self.packaged.name}"
 
     class Meta:
          verbose_name="Precio"
